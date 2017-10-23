@@ -10,10 +10,11 @@ import android.util.Log;
  * Created by Erik on 10/23/2017.
  */
 
-public class BTMonitorReceiver extends BroadcastReceiver {
+public class BTStateReceiver extends BroadcastReceiver {
 
-    private final String TAG = "BTMonitorReceiver.java";
+    private final String TAG = "BTStateReceiver.java";
 
+    // Starts PairActivity when Bluetooth is turned on
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive() called");
@@ -35,11 +36,6 @@ public class BTMonitorReceiver extends BroadcastReceiver {
                     Log.i(TAG, "Bluetooth is now on");
                     Intent pairIntent = new Intent(context, PairActivity.class);
                     context.startActivity(pairIntent);
-                    break;
-                case BluetoothAdapter.STATE_CONNECTED:
-                    Log.i(TAG, "Bluetooth is now connected");
-                    Intent controllerIntent = new Intent(context, ControllerActivity.class);
-                    context.startActivity(controllerIntent);
                     break;
             }
         }

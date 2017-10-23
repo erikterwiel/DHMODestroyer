@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class PairActivity extends AppCompatActivity {
     private final String ITAG = "BTDiscoverReceiver.java";
 
     private BluetoothAdapter mBluetoothAdapter;
+    private BTBondReceiver mBTBondReceiver;
     private BTDiscoverReceiver mBTDiscoverReceiver;
     private ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     private RecyclerView mDeviceList;
@@ -36,6 +38,12 @@ public class PairActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pair);
+
+        // Monitors Bluetooth device bond status
+        mBTBondReceiver = new BTBondReceiver();
+        IntentFilter btBondMonitorIntent =
+                new IntentFilter (BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(mBTBondReceiver, btBondMonitorIntent);
 
         // Starts Bluetooth device discovery
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -72,7 +80,11 @@ public class PairActivity extends AppCompatActivity {
     protected void onStop() {
         Log.i(TAG, "onStop() called");
         super.onStop();
-        unregisterReceiver(mBTDiscoverReceiver);
+        try {
+            unregisterReceiver(mBTDiscoverReceiver);
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
     }
 
     // Adds discovered Bluetooth devices to ArrayList
@@ -90,6 +102,7 @@ public class PairActivity extends AppCompatActivity {
         }
     }
 
+    // RecyclerView adapters and holders below
     private class DeviceAdapter extends RecyclerView.Adapter<DeviceHolder> {
         private ArrayList<BluetoothDevice> btDevices;
 
@@ -122,16 +135,25 @@ public class PairActivity extends AppCompatActivity {
 
     private class DeviceHolder extends RecyclerView.ViewHolder {
 
+        private LinearLayout mDeviceLayout;
         private TextView mDeviceName;
         private TextView mDeviceAddress;
 
         public DeviceHolder(View itemView) {
             super(itemView);
+            mDeviceLayout = (LinearLayout) itemView.findViewById(R.id.device_layout);
             mDeviceName = (TextView) itemView.findViewById(R.id.device_name);
             mDeviceAddress = (TextView) itemView.findViewById(R.id.device_address);
         }
 
-        public void bindDevice(BluetoothDevice device) {
+        public void bindDevice(final BluetoothDevice device) {
+            mDeviceLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBluetoothAdapter.cancelDiscovery();
+                    device.createBond();
+                }
+            });
             mDeviceName.setText(device.getName());
             mDeviceAddress.setText(device.getAddress());
         }

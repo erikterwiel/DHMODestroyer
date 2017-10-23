@@ -14,24 +14,25 @@ public class LaunchActivity extends AppCompatActivity {
     private final String TAG = "LaunchActivity.java";
 
     BluetoothAdapter mBluetoothAdapter;
-    BTMonitorReceiver mBTMonitorReceiver;
+    BTStateReceiver mBTStateReceiver;
     Button mPairButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Log.i(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
         mPairButton = (Button) findViewById(R.id.launch_pair_button);
 
-        // Monitors bluetooth status
-        mBTMonitorReceiver = new BTMonitorReceiver();
-        IntentFilter btMonitorIntent =
+        // Monitors Bluetooth state
+        mBTStateReceiver = new BTStateReceiver();
+        IntentFilter btStateMonitorIntent =
                 new IntentFilter (BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(mBTMonitorReceiver, btMonitorIntent);
+        registerReceiver(mBTStateReceiver, btStateMonitorIntent);
 
-        // Turns bluetooth on and displays paired devices on click
+        // Turns Bluetooth on and displays paired devices on click
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mPairButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,9 +54,13 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        Log.i(TAG, "onDestroy() called");
-        super.onDestroy();
-        unregisterReceiver(mBTMonitorReceiver);
+    protected void onStop() {
+        Log.i(TAG, "onStop() called");
+        super.onStop();
+        try {
+            unregisterReceiver(mBTStateReceiver);
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
     }
 }
