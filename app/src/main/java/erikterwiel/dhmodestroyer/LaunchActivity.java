@@ -40,6 +40,7 @@ public class LaunchActivity extends AppCompatActivity {
                     Intent btEnableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivity(btEnableIntent);
                 }
+
             }
         });
     }

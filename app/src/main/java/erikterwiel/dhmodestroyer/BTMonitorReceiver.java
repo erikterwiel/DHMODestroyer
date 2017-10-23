@@ -33,6 +33,7 @@ public class BTMonitorReceiver extends BroadcastReceiver {
                     break;
                 case BluetoothAdapter.STATE_ON:
                     Log.i(TAG, "Bluetooth is now on");
+                    break;
             }
         }
     }
