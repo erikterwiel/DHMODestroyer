@@ -22,7 +22,8 @@
 
         <receiver android:name=".BTMonitorReceiver" />
 
-        <activity android:name=".PairActivity"></activity>
+        <activity android:name=".PairActivity" />
+        <activity android:name=".ControllerActivity"></activity>
     </application>
 
 </manifest>
