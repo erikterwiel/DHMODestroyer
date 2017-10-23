@@ -36,19 +36,26 @@ public class LaunchActivity extends AppCompatActivity {
         mPairButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mBluetoothAdapter.isEnabled()) {
+                int state = mBluetoothAdapter.getState();
+                if (mBluetoothAdapter.isEnabled() && state == mBluetoothAdapter.STATE_CONNECTED) {
+                    Intent controllerIntent =
+                            new Intent(LaunchActivity.this, ControllerActivity.class);
+                    startActivity(controllerIntent);
+                } else if (mBluetoothAdapter.isEnabled()) {
+                    Intent pairIntent = new Intent(LaunchActivity.this, PairActivity.class);
+                    startActivity(pairIntent);
+                } else {
                     Intent btEnableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivity(btEnableIntent);
                 }
-
             }
         });
     }
 
     @Override
-    protected void onStop() {
-        Log.i(TAG, "onStop() called");
-        super.onStop();
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy() called");
+        super.onDestroy();
         unregisterReceiver(mBTMonitorReceiver);
     }
 }

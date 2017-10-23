@@ -33,6 +33,13 @@ public class BTMonitorReceiver extends BroadcastReceiver {
                     break;
                 case BluetoothAdapter.STATE_ON:
                     Log.i(TAG, "Bluetooth is now on");
+                    Intent pairIntent = new Intent(context, PairActivity.class);
+                    context.startActivity(pairIntent);
+                    break;
+                case BluetoothAdapter.STATE_CONNECTED:
+                    Log.i(TAG, "Bluetooth is now connected");
+                    Intent controllerIntent = new Intent(context, ControllerActivity.class);
+                    context.startActivity(controllerIntent);
                     break;
             }
         }
