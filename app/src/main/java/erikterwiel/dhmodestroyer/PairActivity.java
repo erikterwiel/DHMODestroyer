@@ -81,6 +81,7 @@ public class PairActivity extends AppCompatActivity {
         Log.i(TAG, "onStop() called");
         super.onStop();
         try {
+            unregisterReceiver(mBTBondReceiver);
             unregisterReceiver(mBTDiscoverReceiver);
         } catch (IllegalArgumentException ex) {
             ex.printStackTrace();

@@ -3,60 +3,69 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="32dp"
-    android:layout_marginBottom="24dp"
+    android:layout_marginStart="48dp"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical" >
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/controller_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:text="@string/controller_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="128dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_weight="0"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/controller_thrust"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             <SeekBar
                 android:id="@+id/controller_vertical_stick"
-                android:layout_width="196dp"
-                android:layout_height="196dp"
+                android:layout_width="304dp"
+                android:layout_height="304dp"
                 android:rotation="270"
                 android:progress="50"
                 android:clickable="false"/>
-        </RelativeLayout>
-        <RelativeLayout
+        </LinearLayout>
+        <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/controller_direction"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             <SeekBar
                 android:id="@+id/controller_horizontal_stick"
-                android:layout_width="196dp"
-                android:layout_height="196dp"
+                android:layout_width="384dp"
+                android:layout_height="96dp"
                 android:progress="50"
                 android:clickable="false"/>
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/controller_signature"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:text="@string/controller_signature"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 </LinearLayout>
