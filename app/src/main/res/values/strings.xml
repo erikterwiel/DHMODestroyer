@@ -3,4 +3,7 @@
     <string name="launch_welcome">Welcome to the DHMO Destroyer Controller</string>
     <string name="launch_request">Please press the button below to connect to the Destroyer</string>
     <string name="launch_pair">Pair</string>
+    <string name="pair_label">Pair</string>
+    <string name="controller_title">DHMO Destroyer</string>
+    <string name="controller_signature">Hussain Abdi, Danilo Jokimovic, and Erik Terwiel</string>
 </resources>
