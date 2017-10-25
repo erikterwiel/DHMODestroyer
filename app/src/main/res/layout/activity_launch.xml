@@ -19,9 +19,15 @@
         android:gravity="center"
         android:text="@string/launch_request"/>
     <Button
-        android:id="@+id/launch_pair_button"
+        android:id="@+id/launch_bond_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/launch_pair"/>
+        android:text="@string/launch_bond"/>
+    <Button
+        android:id="@+id/launch_connect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/launch_connect" />
 </LinearLayout>

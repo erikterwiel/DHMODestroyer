@@ -14,12 +14,11 @@ public class BTBondReceiver extends BroadcastReceiver {
 
     private final String TAG = "BTBondReceiver.java";
 
-    // Starts ControllerActivity when bond is bonded
+    // Monitors bond status
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive() called");
         String action = intent.getAction();
-
         if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             int state = device.getBondState();
@@ -29,9 +28,6 @@ public class BTBondReceiver extends BroadcastReceiver {
                     break;
                 case BluetoothDevice.BOND_BONDED:
                     Log.i(TAG, "Bluetooth bond is bonded");
-                    Intent controllerIntent =
-                            new Intent(context, ControllerActivity.class);
-                    context.startActivity(controllerIntent);
                     break;
                 case BluetoothDevice.BOND_NONE:
                     Log.i(TAG, "Bluetooth bond is not bonded");

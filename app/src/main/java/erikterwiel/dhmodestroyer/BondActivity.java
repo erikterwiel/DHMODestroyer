@@ -20,9 +20,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PairActivity extends AppCompatActivity {
+public class BondActivity extends AppCompatActivity {
 
-    private final String TAG = "PairActivity.java";
+    private final String TAG = "BondActivity.java";
     private final String ITAG = "BTDiscoverReceiver.java";
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -37,7 +37,7 @@ public class PairActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pair);
+        setContentView(R.layout.activity_pair_connect);
 
         // Monitors Bluetooth device bond status
         mBTBondReceiver = new BTBondReceiver();
@@ -98,7 +98,7 @@ public class PairActivity extends AppCompatActivity {
                 Log.i(TAG, "Bluetooth device discovered");
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 mBTDevices.add(device);
-                mDeviceAdapter.itemAdded(device, mBTDevices.size() - 1);
+                mDeviceAdapter.itemAdded(mBTDevices.size() - 1);
             }
         }
     }
@@ -113,9 +113,9 @@ public class PairActivity extends AppCompatActivity {
 
         @Override
         public DeviceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(PairActivity.this);
+            LayoutInflater layoutInflater = LayoutInflater.from(BondActivity.this);
             View view = layoutInflater.inflate(R.layout.list_item_device, parent, false);
-            return new PairActivity.DeviceHolder(view);
+            return new BondActivity.DeviceHolder(view);
         }
 
         @Override
@@ -129,7 +129,7 @@ public class PairActivity extends AppCompatActivity {
             return btDevices.size();
         }
 
-        public void itemAdded(BluetoothDevice device, int position) {
+        public void itemAdded(int position) {
             notifyItemInserted(position);
         }
     }
@@ -153,6 +153,7 @@ public class PairActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     mBluetoothAdapter.cancelDiscovery();
                     device.createBond();
+                    finish();
                 }
             });
             mDeviceName.setText(device.getName());

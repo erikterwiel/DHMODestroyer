@@ -15,7 +15,8 @@ public class LaunchActivity extends AppCompatActivity {
 
     BluetoothAdapter mBluetoothAdapter;
     BTStateReceiver mBTStateReceiver;
-    Button mPairButton;
+    Button mBondButton;
+    Button mConnectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,31 +25,50 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
-        mPairButton = (Button) findViewById(R.id.launch_pair_button);
+        mBondButton = (Button) findViewById(R.id.launch_bond_button);
+        mConnectButton = (Button) findViewById(R.id.launch_connect_button);
 
         // Monitors Bluetooth state
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBTStateReceiver = new BTStateReceiver();
         IntentFilter btStateMonitorIntent =
                 new IntentFilter (BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBTStateReceiver, btStateMonitorIntent);
 
-        // Turns Bluetooth on and displays paired devices on click
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPairButton.setOnClickListener(new View.OnClickListener() {
+        // Turns Bluetooth on and displays available devices on click
+        mBondButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int state = mBluetoothAdapter.getState();
                 if (mBluetoothAdapter.isEnabled() && state == mBluetoothAdapter.STATE_CONNECTED) {
+                    Log.i(TAG, "Bluetooth enabled, launching ControllerActivity");
                     Intent controllerIntent =
                             new Intent(LaunchActivity.this, ControllerActivity.class);
                     startActivity(controllerIntent);
                 } else if (mBluetoothAdapter.isEnabled()) {
-                    Intent pairIntent = new Intent(LaunchActivity.this, PairActivity.class);
-                    startActivity(pairIntent);
+                    Log.i(TAG, "Bluetooth enabled, launching BondActivity");
+                    Intent bondIntent = new Intent(LaunchActivity.this, BondActivity.class);
+                    startActivity(bondIntent);
                 } else {
+                    Log.i(TAG, "Bluetooth not enabled, requesting on");
                     Intent btEnableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivity(btEnableIntent);
                 }
+            }
+        });
+
+        // Connects to bonded devices
+        mConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mBluetoothAdapter.isEnabled()) {
+                    Log.i(TAG, "Bluetooth not enabled, requesting on");
+                    Intent btEnableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivity(btEnableIntent);
+                }
+                Log.i(TAG, "Bluetooth enabled, launching ConnectActivity");
+                Intent connectIntent = new Intent(LaunchActivity.this, ConnectActivity.class);
+                startActivity(connectIntent);
             }
         });
     }

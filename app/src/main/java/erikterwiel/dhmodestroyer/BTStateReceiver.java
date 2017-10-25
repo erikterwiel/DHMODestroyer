@@ -14,7 +14,7 @@ public class BTStateReceiver extends BroadcastReceiver {
 
     private final String TAG = "BTStateReceiver.java";
 
-    // Starts PairActivity when Bluetooth is turned on
+    // Starts BondActivity when Bluetooth is turned on
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive() called");
@@ -34,8 +34,8 @@ public class BTStateReceiver extends BroadcastReceiver {
                     break;
                 case BluetoothAdapter.STATE_ON:
                     Log.i(TAG, "Bluetooth is now on");
-                    Intent pairIntent = new Intent(context, PairActivity.class);
-                    context.startActivity(pairIntent);
+                    Intent bondIntent = new Intent(context, BondActivity.class);
+                    context.startActivity(bondIntent);
                     break;
             }
         }

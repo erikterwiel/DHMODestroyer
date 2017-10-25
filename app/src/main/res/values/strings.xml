@@ -2,8 +2,10 @@
     <string name="app_name">DHMO Destroyer</string>
     <string name="launch_welcome">Welcome to the DHMO Destroyer Controller</string>
     <string name="launch_request">Please press the button below to connect to the Destroyer</string>
-    <string name="launch_pair">Pair</string>
-    <string name="pair_label">Pair</string>
+    <string name="launch_bond">Bond</string>
+    <string name="launch_connect">Connect</string>
+    <string name="bond_label">Bond</string>
+    <string name="connect_label">Connect</string>
     <string name="controller_title">DHMO Destroyer</string>
     <string name="controller_thrust">Thrust</string>
     <string name="controller_direction">Direction</string>
