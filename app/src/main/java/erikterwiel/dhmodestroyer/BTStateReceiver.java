@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 /**
@@ -17,7 +18,12 @@ public class BTStateReceiver extends BroadcastReceiver {
     // Starts BondActivity when Bluetooth is turned on
     @Override
     public void onReceive(Context context, Intent intent) {
+
         Log.i(TAG, "onReceive() called");
+
+        SharedPreferences senderDatabase =
+                context.getSharedPreferences("senderDatabase", Context.MODE_PRIVATE);
+
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         String action = intent.getAction();
         if (action.equals(bluetoothAdapter.ACTION_STATE_CHANGED)) {
@@ -34,8 +40,15 @@ public class BTStateReceiver extends BroadcastReceiver {
                     break;
                 case BluetoothAdapter.STATE_ON:
                     Log.i(TAG, "Bluetooth is now on");
-                    Intent bondIntent = new Intent(context, BondActivity.class);
-                    context.startActivity(bondIntent);
+                    if (senderDatabase.getString("toOpen", null).equals("Bond")) {
+                        Log.i(TAG, "Bluetooth enabled, launching BondActivity");
+                        Intent bondIntent = new Intent(context, BondActivity.class);
+                        context.startActivity(bondIntent);
+                    } else if (senderDatabase.getString("toOpen", null).equals("Connect")) {
+                        Log.i(TAG, "Bluetooth enabled, launching ConnectActivity");
+                        Intent connectIntent = new Intent(context, ConnectActivity.class);
+                        context.startActivity(connectIntent);
+                    }
                     break;
             }
         }

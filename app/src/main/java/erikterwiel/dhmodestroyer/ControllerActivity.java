@@ -1,13 +1,24 @@
 package erikterwiel.dhmodestroyer;
 
+import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -20,26 +31,106 @@ public class ControllerActivity extends AppCompatActivity {
     private BluetoothDevice mDevice;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mBluetoothSocket;
+    private SeekBar mVerticalStick;
+    private SeekBar mHorizontalStick;
+    private TextView mVerticalValue;
+    private TextView mHorizontalValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.i(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
+
+        View decorView = getWindow().getDecorView();
+        int uIOptions =   View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uIOptions);
         setContentView(R.layout.activity_controller);
 
         mDevice = getIntent().getParcelableExtra("Device");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         new ConnectBluetooth().execute();
 
-        View decorView = getWindow().getDecorView();
-        int uIOptions =
-                  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(uIOptions);
+        mVerticalStick = (SeekBar) findViewById(R.id.controller_vertical_stick);
+        mHorizontalStick = (SeekBar) findViewById(R.id.controller_horizontal_stick);
+        mVerticalValue = (TextView) findViewById(R.id.controller_vertical_value);
+        mHorizontalValue = (TextView) findViewById(R.id.controller_horizontal_value);
 
+
+        mVerticalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mVerticalValue.setText(Integer.toString(progress - 50));
+                try {
+                    String toSend = "v" + Integer.toString(progress);
+                    Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
+                    mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                animate(seekBar, 50, 250);
+            }
+        });
+
+        mHorizontalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mHorizontalValue.setText(Integer.toString(progress - 50));
+                try {
+                    String toSend = "h" + Integer.toString(progress);
+                    Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
+                    mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                animate(seekBar, 50, 250);
+            }
+        });
+
+        // Changes SeekBar joystick drawables
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+
+        BitmapDrawable thumbBitmapDrawable = (BitmapDrawable) ContextCompat.getDrawable(
+                this, R.drawable.ic_swap_vertical_circle_white_48dp);
+        Bitmap thumbBitmap = thumbBitmapDrawable.getBitmap();
+        Drawable thumbDrawable = new BitmapDrawable(
+                getResources(), Bitmap.createScaledBitmap(thumbBitmap, px, px, true));
+        mVerticalStick.setThumb(thumbDrawable);
+
+        BitmapDrawable thumbBitmapDrawable2 = (BitmapDrawable) ContextCompat.getDrawable(
+                this, R.drawable.ic_swap_vertical_circle_white_48dp);
+        Bitmap thumbBitmap2 = thumbBitmapDrawable2.getBitmap();
+        Drawable thumbDrawable2 = new BitmapDrawable(
+                getResources(), Bitmap.createScaledBitmap(thumbBitmap2, px, px, true));
+        mHorizontalStick.setThumb(thumbDrawable2);
+
+
+
+    }
+
+    private void animate(SeekBar seekBar, int progress, int speed) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(seekBar, "progress", progress);
+        animation.setDuration(speed);
+        animation.setInterpolator(new DecelerateInterpolator());
+        animation.start();
     }
 
     @Override
