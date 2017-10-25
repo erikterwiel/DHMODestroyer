@@ -1,5 +1,6 @@
 package erikterwiel.dhmodestroyer;
 
+import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
 
 import java.io.IOException;
@@ -61,7 +63,9 @@ public class ControllerActivity extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                animate(seekBar, 50, 250);
+            }
         });
 
         mHorizontalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -80,8 +84,17 @@ public class ControllerActivity extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                animate(seekBar, 50, 250);
+            }
         });
+    }
+
+    private void animate(SeekBar seekBar, int progress, int speed) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(seekBar, "progress", progress);
+        animation.setDuration(speed);
+        animation.setInterpolator(new DecelerateInterpolator());
+        animation.start();
     }
 
     @Override
