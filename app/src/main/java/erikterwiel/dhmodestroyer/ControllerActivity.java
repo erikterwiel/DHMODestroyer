@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -35,12 +36,18 @@ public class ControllerActivity extends AppCompatActivity {
     private SeekBar mHorizontalStick;
     private TextView mVerticalValue;
     private TextView mHorizontalValue;
+    private ImageView mBluetoothStatus;
+    private boolean mDrawableChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.i(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
+
+        mDevice = getIntent().getParcelableExtra("Device");
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        new ConnectBluetooth().execute();
 
         View decorView = getWindow().getDecorView();
         int uIOptions =   View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -50,19 +57,20 @@ public class ControllerActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uIOptions);
         setContentView(R.layout.activity_controller);
 
-        mDevice = getIntent().getParcelableExtra("Device");
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        new ConnectBluetooth().execute();
-
         mVerticalStick = (SeekBar) findViewById(R.id.controller_vertical_stick);
         mHorizontalStick = (SeekBar) findViewById(R.id.controller_horizontal_stick);
         mVerticalValue = (TextView) findViewById(R.id.controller_vertical_value);
         mHorizontalValue = (TextView) findViewById(R.id.controller_horizontal_value);
-
+        mBluetoothStatus = (ImageView) findViewById(R.id.controller_status);
 
         mVerticalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mBluetoothSocket.isConnected() && !mDrawableChanged) {
+                    mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_connected_white_48dp);
+                    mDrawableChanged = true;
+
+                }
                 mVerticalValue.setText(Integer.toString(progress - 50));
                 try {
                     String toSend = "v" + Integer.toString(progress);
@@ -85,6 +93,10 @@ public class ControllerActivity extends AppCompatActivity {
         mHorizontalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mBluetoothSocket.isConnected() && !mDrawableChanged) {
+                    mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_connected_white_48dp);
+                    mDrawableChanged = true;
+                }
                 mHorizontalValue.setText(Integer.toString(progress - 50));
                 try {
                     String toSend = "h" + Integer.toString(progress);
@@ -121,9 +133,6 @@ public class ControllerActivity extends AppCompatActivity {
         Drawable thumbDrawable2 = new BitmapDrawable(
                 getResources(), Bitmap.createScaledBitmap(thumbBitmap2, px, px, true));
         mHorizontalStick.setThumb(thumbDrawable2);
-
-
-
     }
 
     private void animate(SeekBar seekBar, int progress, int speed) {

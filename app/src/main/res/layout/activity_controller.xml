@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginStart="48dp"
     android:layout_marginBottom="16dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,31 +49,43 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="384dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:gravity="center"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/controller_direction"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             <SeekBar
                 android:id="@+id/controller_horizontal_stick"
                 android:layout_width="384dp"
                 android:layout_height="96dp"
+                android:layout_centerVertical="true"
                 android:progress="50"
                 android:clickable="false"
                 android:progressTint="@color/colorSeekBar"/>
+            <ImageView
+                android:id="@+id/controller_status"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="16dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_bluetooth_searching_white_48dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/controller_horizontal_stick"
+                android:layout_centerHorizontal="true"
+                android:text="@string/controller_direction"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             <TextView
                 android:id="@+id/controller_horizontal_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/controller_horizontal_stick"
+                android:layout_centerHorizontal="true"
                 android:text="@string/controller_value_default"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"

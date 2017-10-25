@@ -6,9 +6,9 @@
     <string name="launch_connect">Connect</string>
     <string name="bond_label">Bond</string>
     <string name="connect_label">Connect</string>
-    <string name="controller_title">DHMO Destroyer</string>
+    <string name="controller_title">DHMO Destroyer Controller</string>
     <string name="controller_thrust">Thrust</string>
-    <string name="controller_direction">Direction</string>
+    <string name="controller_direction">Steer</string>
     <string name="controller_value_default">0</string>
     <string name="controller_signature">Created by Hussain Abdi, Danilo Jokimovic, and Erik Terwiel</string>
 </resources>
