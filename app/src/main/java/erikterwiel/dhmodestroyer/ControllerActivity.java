@@ -16,6 +16,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -30,6 +33,8 @@ public class ControllerActivity extends AppCompatActivity {
     private BluetoothSocket mBluetoothSocket;
     private SeekBar mVerticalStick;
     private SeekBar mHorizontalStick;
+    private TextView mVerticalValue;
+    private TextView mHorizontalValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +56,14 @@ public class ControllerActivity extends AppCompatActivity {
 
         mVerticalStick = (SeekBar) findViewById(R.id.controller_vertical_stick);
         mHorizontalStick = (SeekBar) findViewById(R.id.controller_horizontal_stick);
+        mVerticalValue = (TextView) findViewById(R.id.controller_vertical_value);
+        mHorizontalValue = (TextView) findViewById(R.id.controller_horizontal_value);
+
 
         mVerticalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mVerticalValue.setText(Integer.toString(progress - 50));
                 try {
                     String toSend = "v" + Integer.toString(progress);
                     Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
@@ -76,6 +85,7 @@ public class ControllerActivity extends AppCompatActivity {
         mHorizontalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mHorizontalValue.setText(Integer.toString(progress - 50));
                 try {
                     String toSend = "h" + Integer.toString(progress);
                     Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");

@@ -32,12 +32,18 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             <SeekBar
                 android:id="@+id/controller_vertical_stick"
-                android:layout_width="304dp"
-                android:layout_height="304dp"
+                android:layout_width="272dp"
+                android:layout_height="272dp"
                 android:rotation="270"
                 android:progress="50"
                 android:clickable="false"
                 android:progressTint="@color/colorSeekBar"/>
+            <TextView
+                android:id="@+id/controller_vertical_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/controller_value_default"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -61,6 +67,12 @@
                 android:progress="50"
                 android:clickable="false"
                 android:progressTint="@color/colorSeekBar"/>
+            <TextView
+                android:id="@+id/controller_horizontal_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/controller_value_default"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
         </LinearLayout>
     </LinearLayout>
     <TextView

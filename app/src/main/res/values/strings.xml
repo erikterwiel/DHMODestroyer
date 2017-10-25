@@ -9,5 +9,6 @@
     <string name="controller_title">DHMO Destroyer</string>
     <string name="controller_thrust">Thrust</string>
     <string name="controller_direction">Direction</string>
+    <string name="controller_value_default">0</string>
     <string name="controller_signature">Created by Hussain Abdi, Danilo Jokimovic, and Erik Terwiel</string>
 </resources>
