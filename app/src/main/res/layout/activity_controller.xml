@@ -36,7 +36,8 @@
                 android:layout_height="304dp"
                 android:rotation="270"
                 android:progress="50"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:progressTint="@color/colorSeekBar"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -58,7 +59,8 @@
                 android:layout_width="384dp"
                 android:layout_height="96dp"
                 android:progress="50"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:progressTint="@color/colorSeekBar"/>
         </LinearLayout>
     </LinearLayout>
     <TextView
