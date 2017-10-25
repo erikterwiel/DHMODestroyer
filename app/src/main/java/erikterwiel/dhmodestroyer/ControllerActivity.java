@@ -4,10 +4,15 @@ import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
@@ -88,6 +93,27 @@ public class ControllerActivity extends AppCompatActivity {
                 animate(seekBar, 50, 250);
             }
         });
+
+        // Changes SeekBar joystick drawables
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 56, getResources().getDisplayMetrics());
+
+        BitmapDrawable thumbBitmapDrawable = (BitmapDrawable) ContextCompat.getDrawable(
+                this, R.drawable.ic_swap_vertical_circle_white_48dp);
+        Bitmap thumbBitmap = thumbBitmapDrawable.getBitmap();
+        Drawable thumbDrawable = new BitmapDrawable(
+                getResources(), Bitmap.createScaledBitmap(thumbBitmap, px, px, true));
+        mVerticalStick.setThumb(thumbDrawable);
+
+        BitmapDrawable thumbBitmapDrawable2 = (BitmapDrawable) ContextCompat.getDrawable(
+                this, R.drawable.ic_swap_vertical_circle_white_48dp);
+        Bitmap thumbBitmap2 = thumbBitmapDrawable2.getBitmap();
+        Drawable thumbDrawable2 = new BitmapDrawable(
+                getResources(), Bitmap.createScaledBitmap(thumbBitmap2, px, px, true));
+        mHorizontalStick.setThumb(thumbDrawable2);
+
+
+
     }
 
     private void animate(SeekBar seekBar, int progress, int speed) {
