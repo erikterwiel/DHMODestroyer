@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">DHMO Destroyer</string>
+    <string name="launch_welcome">Welcome to the DHMO Destroyer Controller</string>
+    <string name="launch_request">Please press the button below to connect to the Destroyer</string>
+    <string name="launch_bond">Bond</string>
+    <string name="launch_connect">Connect</string>
+    <string name="bond_label">Bond</string>
+    <string name="connect_label">Connect</string>
+    <string name="controller_title">DHMO Destroyer Controller</string>
+    <string name="controller_thrust">Thrust</string>
+    <string name="controller_direction">Steer</string>
+    <string name="controller_value_default">0</string>
+    <string name="controller_signature">Created by Hussain Abdi, Danilo Jokimovic, and Erik Terwiel</string>
 </resources>
