@@ -28,10 +28,6 @@ hPower = Serial.parseInt();
 int speed1; //speed of righthand motor
 int speed2; //speed of lefthand motor
 
-/*
-analogWrite(motor1, hPower);
-analogWrite(motor2, vPower);
-*/
 //forward thrust
 if (vPower > 50 && vPower <=100)
 {
@@ -43,15 +39,8 @@ vPower *= 5;
   speed1 = map(vPower, 550, 1023, 0, 255);
   speed2 = map(vPower, 550, 1023, 0, 255);
 }
-  
-else if(hPower>=1 && hPower < 50)
-{
-  hPower = 180 - hPower; 
-  rudder.write(hPower);
-  delay(20);
-} 
 //reverse
-if(vPower < 50 && vPower >= 0)
+else if(vPower < 50 && vPower >= 1)
 {
   vPower -= 50;
   vPower *= 5;
@@ -60,6 +49,19 @@ if(vPower < 50 && vPower >= 0)
   speed1 = map(vPower, 470, 0, 0, 255);
   speed2 = map(vPower, 470, 0, 0, 255);
 }
+else
+{
+  speed1 = 0;
+  speed2 = 0;
+}
+
+  
+if(hPower>=1 && hPower < 50)
+{
+  hPower = 180 - hPower; 
+  rudder.write(hPower);
+  delay(20);
+} 
 
 else if (hPower >50 && hPower <= 100)
 {
@@ -67,13 +69,9 @@ else if (hPower >50 && hPower <= 100)
   rudder.write(hPower);
   delay(20);
 }
-else
-{
-  speed1 = 0;
-  speed2 = 0;
+else {
   rudder.write(0);
 }
-
 delay(60);
 }
 
