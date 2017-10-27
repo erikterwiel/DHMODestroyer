@@ -37,7 +37,7 @@ public class ControllerActivity extends AppCompatActivity {
     private TextView mVerticalValue;
     private TextView mHorizontalValue;
     private ImageView mBluetoothStatus;
-    private boolean mDrawableChanged = false;
+    private boolean mConnected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +66,12 @@ public class ControllerActivity extends AppCompatActivity {
         mVerticalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mBluetoothSocket.isConnected() && !mDrawableChanged) {
+                if (mBluetoothSocket.isConnected() && !mConnected) {
                     mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_connected_white_48dp);
-                    mDrawableChanged = true;
-
+                    mConnected = true;
+                } else if (!mBluetoothSocket.isConnected() && mConnected) {
+                    mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_searching_white_48dp);
+                    mConnected = false;
                 }
                 mVerticalValue.setText(Integer.toString(progress - 50));
                 try {
@@ -93,9 +95,12 @@ public class ControllerActivity extends AppCompatActivity {
         mHorizontalStick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (mBluetoothSocket.isConnected() && !mDrawableChanged) {
+                if (mBluetoothSocket.isConnected() && !mConnected) {
                     mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_connected_white_48dp);
-                    mDrawableChanged = true;
+                    mConnected = true;
+                } else if (!mBluetoothSocket.isConnected() && mConnected) {
+                    mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_searching_white_48dp);
+                    mConnected = false;
                 }
                 mHorizontalValue.setText(Integer.toString(progress - 50));
                 try {
@@ -133,6 +138,23 @@ public class ControllerActivity extends AppCompatActivity {
         Drawable thumbDrawable2 = new BitmapDrawable(
                 getResources(), Bitmap.createScaledBitmap(thumbBitmap2, px, px, true));
         mHorizontalStick.setThumb(thumbDrawable2);
+
+        mBluetoothStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mBluetoothSocket.isConnected()) {
+                    try {
+                        mBluetoothSocket.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    mConnected = false;
+                    mBluetoothStatus.setImageResource(R.drawable.ic_bluetooth_searching_white_48dp);
+                } else {
+                    new ConnectBluetooth().execute();
+                }
+            }
+        });
     }
 
     private void animate(SeekBar seekBar, int progress, int speed) {
