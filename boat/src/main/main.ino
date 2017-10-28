@@ -1,21 +1,31 @@
 #include <Servo.h>
 
-int motor1 = 13;
-int motor2 = 14;
+//change motor1 and motor2!!
 int vPower = 0;
 int hPower = 0;
+int in1 = 11;
+int in2 = 10;
+int in3 = 9;
+int in4 = 8;
+
+
+
 Servo rudder;
 
 void setup()
 {
+ 
+  pinMode (in1, OUTPUT);
+  pinMode (in2, OUTPUT);
+  pinMode (in3, OUTPUT);
+  pinMode (in4, OUTPUT);
+    
   rudder.attach(9);
-  pinMode (motor1, OUTPUT);
-  pinMode (motor2, OUTPUT);
+  
   
   Serial.begin(9600);
 }
-void loop ()
-{
+void loop () {
 
 if (Serial.available()>0)
 {
@@ -34,8 +44,8 @@ if (vPower > 50 && vPower <=100)
 vPower -= 50;
 vPower *= 5;
 
-  digitalWrite(motor1, HIGH); //righthand propeller (clockwise)
-  digitalWrite(motor2, LOW); //lefthand propeller (counter-clockwise)
+  digitalWrite(in1, HIGH); //righthand propeller (clockwise)
+  digitalWrite(in2, LOW); //lefthand propeller (counter-clockwise)
   speed1 = map(vPower, 550, 1023, 0, 255);
   speed2 = map(vPower, 550, 1023, 0, 255);
 }
@@ -44,8 +54,8 @@ else if(vPower < 50 && vPower >= 1)
 {
   vPower -= 50;
   vPower *= 5;
-  digitalWrite(motor1, LOW); //righthand propeller (counter-clockwise)
-  digitalWrite(motor2, HIGH); //lefthand propeller (clockwise)
+  digitalWrite(in3, LOW); //righthand propeller (counter-clockwise)
+  digitalWrite(in4, HIGH); //lefthand propeller (clockwise)
   speed1 = map(vPower, 470, 0, 0, 255);
   speed2 = map(vPower, 470, 0, 0, 255);
 }
