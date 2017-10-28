@@ -39,7 +39,7 @@ void setup() {
   pinMode(enB, OUTPUT);
 
   servo.attach(srv);
-  servo.write(0);
+  servo.write(90);
 
 }
 
