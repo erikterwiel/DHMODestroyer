@@ -75,9 +75,18 @@ public class ControllerActivity extends AppCompatActivity {
                 }
                 mVerticalValue.setText(Integer.toString(progress - 50));
                 try {
-                    String toSend = "v" + Integer.toString(progress);
-                    Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
-                    mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                    if (progress % 5 == 0) {
+                        String toSend;
+                        if (progress < 10) {
+                            toSend = "v0" + Integer.toString(progress);
+                        } else if (progress == 100) {
+                            toSend = "v99";
+                        } else {
+                            toSend = "v" + Integer.toString(progress);
+                        }
+                        Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
+                        mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -104,9 +113,19 @@ public class ControllerActivity extends AppCompatActivity {
                 }
                 mHorizontalValue.setText(Integer.toString(progress - 50));
                 try {
-                    String toSend = "h" + Integer.toString(progress);
-                    Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
-                    mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                    if (progress % 5 == 0) {
+                        String toSend;
+                        if (progress < 10) {
+                            toSend = "h0" + Integer.toString(progress);
+                        } else if (progress == 100){
+                            toSend = "h99";
+                        }
+                        else {
+                            toSend = "h" + Integer.toString(progress);
+                        }
+                        Log.i(TAG, "Sending " + toSend + " to DHMO Destroyer");
+                        mBluetoothSocket.getOutputStream().write(toSend.getBytes());
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
