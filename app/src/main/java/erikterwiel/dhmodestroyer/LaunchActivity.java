@@ -35,13 +35,6 @@ public class LaunchActivity extends AppCompatActivity {
                 getSharedPreferences("senderDatabase", Context.MODE_PRIVATE);
         final SharedPreferences.Editor databaseEditor = senderDatabase.edit();
 
-        // Monitors Bluetooth state
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBTStateReceiver = new BTStateReceiver();
-        IntentFilter btStateMonitorIntent =
-                new IntentFilter (BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(mBTStateReceiver, btStateMonitorIntent);
-
         // Turns Bluetooth on and displays available devices on click
         mBondButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +80,21 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        Log.i(TAG, "onDestroy() called");
-        super.onDestroy();
+    protected void onStart() {
+        Log.i(TAG, "onStart() called");
+        super.onStart();
+        // Monitors Bluetooth state
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBTStateReceiver = new BTStateReceiver();
+        IntentFilter btStateMonitorIntent =
+                new IntentFilter (BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mBTStateReceiver, btStateMonitorIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop() called");
+        super.onStop();
         try {
             unregisterReceiver(mBTStateReceiver);
         } catch (IllegalArgumentException ex) {
