@@ -189,6 +189,7 @@ public class ControllerActivity extends AppCompatActivity {
         super.onStop();
         try {
             mBluetoothSocket.close();
+            Log.i(TAG, "Test123");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
