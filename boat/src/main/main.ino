@@ -19,8 +19,7 @@ char inputDirection;
 char inputChars[2];
 int inputInt;
 int inputIndex;
-int vPower = 0;
-int hPower = 0;
+int speedMotors;
 int motorSpeedRight; //speed of righthand motor (was 'speed1')
 int motorSpeedLeft; //speed of lefthand motor (was 'speed2')
 
@@ -72,35 +71,36 @@ void loop () {
 
   if (inputDirection == 'v') {
     if (inputInt > 50) {
-    //Forward Thrust
-    inputInt -= 50;
-    inputInt = fabs(inputInt);
-    //Motor right forwards
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-    //Motor left forwards
-    digitalWrite(in3, LOW);
-    digitalWrite(in4, HIGH);
-    motorSpeedRight = map(inputInt, 1, 50, 0, 255);
-    motorSpeedLeft = map(inputInt, 1, 50, 0, 255);
-  } else if (inputInt < 50) {
-    //Backward Thrust
-    inputInt -= 50;
-    inputInt = fabs(inputInt);
-    //Motor right backwards
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-    //Motor left backwards
-    digitalWrite(in3, HIGH);
-    digitalWrite(in4, LOW);
-    motorSpeedRight = map(inputInt, 1, 50, 0, 255);
-    motorSpeedLeft = map(inputInt, 1, 50, 0, 255);
-  } else if (inputInt == 50) {
-    motorSpeedRight = 0;
-    motorSpeedLeft = 0;
-  }
-  analogWrite(enA, motorSpeedRight); // Send PWM signal to motor Right
-  analogWrite(enB, motorSpeedLeft); // Send PWM signal to motor Left
+      //Forward Thrust
+      inputInt -= 50;
+      inputInt = fabs(inputInt);
+      speedMotors = map(inputInt, 1, 50, 0, 255);
+      //Motor right forwards
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, HIGH);
+      //Motor left backwards
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+    } else if (inputInt < 50) {
+      //Backward Thrust
+      inputInt -= 50;
+      inputInt = fabs(inputInt);
+      speedMotors = map(inputInt, 1, 50, 0, 255);
+      //Motor right backwards
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW);
+      //Motor left forwards
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, HIGH);
+    } else if (inputInt == 50) {
+      speedMotors = 0;
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, LOW);
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, LOW);
+    }
+    analogWrite(enA, speedMotors); // Send PWM signal to motor Right
+    analogWrite(enB, speedMotors); // Send PWM signal to motor Left
   } else if (inputDirection == 'h') {
     int angle = inputInt * 9 / 5;
     servo.write(angle);
@@ -110,7 +110,7 @@ void loop () {
 
 /*
 
-  
+
 
   //forward thrust
   if (vPower > 50 && vPower <= 100) {
