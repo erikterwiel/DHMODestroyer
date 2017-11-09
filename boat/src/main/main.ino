@@ -84,12 +84,13 @@ void loop () {
     motorSpeedRight = map(inputInt, 1, 50, 0, 255);
     motorSpeedLeft = map(inputInt, 1, 50, 0, 255);
   } else if (inputInt < 50) {
+    //Backward Thrust
     inputInt -= 50;
     inputInt = fabs(inputInt);
-    //Motor A backwards
+    //Motor right backwards
     digitalWrite(in1, LOW);
     digitalWrite(in2, HIGH);
-    //Motor B backwards
+    //Motor left backwards
     digitalWrite(in3, HIGH);
     digitalWrite(in4, LOW);
     motorSpeedRight = map(inputInt, 1, 50, 0, 255);
