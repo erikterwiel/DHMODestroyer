@@ -71,7 +71,22 @@ void loop () {
   inputInt = atoi(inputChars);
 
   if (inputDirection == 'v') {
-    
+    if (inputInt > 50) {
+    inputInt -= 50;
+    inputInt = fabs(inputInt);
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    speed1 = map(inputInt, 1, 50, 0, 255);
+  } else if (inputInt < 50) {
+    inputInt -= 50;
+    inputInt = fabs(inputInt);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, HIGH);
+    speed1 = map(inputInt, 1, 50, 0, 255);
+  } else if (inputInt == 50) {
+    speed1 = 0;
+    speed2 = 0;
+  }
   } else if (inputDirection == 'h') {
     int angle = inputInt * 9 / 5;
     servo.write(angle);
@@ -81,8 +96,7 @@ void loop () {
 
 /*
 
-  vPower = Serial.parseInt();
-  hPower = Serial.parseInt();
+  
 
   //forward thrust
   if (vPower > 50 && vPower <= 100) {
@@ -91,8 +105,8 @@ void loop () {
     vPower *= 5;
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
-    speed1 = map(vPower, 550, 1023, 0, 255);
-    speed2 = map(vPower, 550, 1023, 0, 255);
+    speed1 = map(vPower, 0, 1023, 0, 255);
+    speed2 = map(vPower, 0, 1023, 0, 255);
 
   } else if (vPower < 50 && vPower >= 1) {
 
@@ -100,8 +114,8 @@ void loop () {
     vPower *= 5;
     digitalWrite(in3, LOW);
     digitalWrite(in4, HIGH);
-    speed1 = map(vPower, 470, 0, 0, 255);
-    speed2 = map(vPower, 470, 0, 0, 255);
+    speed1 = map(vPower, 0, 1023, 0, 255);
+    speed2 = map(vPower, 0, 1023, 0, 255);
 
   } else {
     speed1 = 0;
