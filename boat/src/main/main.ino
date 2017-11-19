@@ -68,6 +68,8 @@ void loop () {
     }
   }
   inputInt = atoi(inputChars);
+  //socket.print(inputDirection);
+  //socket.println(inputInt);
 
   if (inputDirection == 'v') {
     if (inputInt > 50) {
@@ -99,6 +101,7 @@ void loop () {
       digitalWrite(in3, LOW);
       digitalWrite(in4, LOW);
     }
+    socket.println(speedMotors);
     analogWrite(enA, speedMotors); // Send PWM signal to motor Right
     analogWrite(enB, speedMotors); // Send PWM signal to motor Left
   } else if (inputDirection == 'h') {
