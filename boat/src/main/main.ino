@@ -37,6 +37,14 @@ void setup() {
   pinMode(in4, OUTPUT);
   pinMode(enB, OUTPUT);
 
+  //Initial set-up motors
+  //Motor right forwards
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  //Motor left backwards
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+
   servo.attach(srv);
   servo.write(90);
 
@@ -68,9 +76,6 @@ void loop () {
     }
   }
   inputInt = atoi(inputChars);
-  //socket.print(inputDirection);
-  //socket.println(inputInt);
-
   if (inputDirection == 'v') {
     if (inputInt > 50) {
       //Forward Thrust
@@ -101,7 +106,6 @@ void loop () {
       digitalWrite(in3, LOW);
       digitalWrite(in4, LOW);
     }
-    socket.println(speedMotors);
     analogWrite(enA, speedMotors); // Send PWM signal to motor Right
     analogWrite(enB, speedMotors); // Send PWM signal to motor Left
   } else if (inputDirection == 'h') {
