@@ -101,7 +101,8 @@ class BondActivity : AppCompatActivity() {
     }
 
     // RecyclerView adapters and holders below
-    private inner class DeviceAdapter(private val btDevices: ArrayList<BluetoothDevice>) : RecyclerView.Adapter<DeviceHolder>() {
+    private inner class DeviceAdapter(private val btDevices: ArrayList<BluetoothDevice>) :
+            RecyclerView.Adapter<DeviceHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceHolder {
             val layoutInflater = LayoutInflater.from(this@BondActivity)
