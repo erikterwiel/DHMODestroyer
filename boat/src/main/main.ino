@@ -99,7 +99,7 @@ void loop () {
     analogWrite(enA, speedMotors); // Send PWM signal to motor Right
     analogWrite(enB, speedMotors); // Send PWM signal to motor Left
   } else if (inputDirection == 'h') {
-    int angle = inputInt * 9 / 5;
+    int angle = map(inputInt, 0, 100, 70, 110);
     servo.write(angle);
   }
   delay(125);
