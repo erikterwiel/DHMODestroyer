@@ -1,83 +1,107 @@
+#include <stdlib.h>
+#include <SoftwareSerial.h>
 #include <Servo.h>
 
-int motor1 = 13;
-int motor2 = 14;
-int vPower = 0;
-int hPower = 0;
-Servo rudder;
+// Pin initialization
+int txd = 0;
+int rxd = 1;
+int enA = 11;
+int in1 = 9;
+int in2 = 8;
+int in3 = 7;
+int in4 = 6;
+int enB = 5;
+int srv = 3;
 
-void setup()
-{
-  rudder.attach(9);
-  pinMode (motor1, OUTPUT);
-  pinMode (motor2, OUTPUT);
-  
-  Serial.begin(9600);
-}
-void loop ()
-{
+// Functionality variables
+char inputStream;
+char inputDirection;
+char inputChars[2];
+int inputInt;
+int inputIndex;
+int speedMotors;
 
-if (Serial.available()>0)
-{
-  vPower = Serial.read();
-  hPower = Serial.read();
-}
-vPower = Serial.parseInt();
-hPower = Serial.parseInt();
+SoftwareSerial socket(txd, rxd);
+Servo servo;
 
-int speed1; //speed of righthand motor
-int speed2; //speed of lefthand motor
+void setup() {
 
-//forward thrust
-if (vPower > 50 && vPower <=100)
-{
-vPower -= 50;
-vPower *= 5;
+  socket.begin(9600);
 
-  digitalWrite(motor1, HIGH); //righthand propeller (clockwise)
-  digitalWrite(motor2, LOW); //lefthand propeller (counter-clockwise)
-  speed1 = map(vPower, 550, 1023, 0, 255);
-  speed2 = map(vPower, 550, 1023, 0, 255);
-}
-//reverse
-else if(vPower < 50 && vPower >= 1)
-{
-  vPower -= 50;
-  vPower *= 5;
-  digitalWrite(motor1, LOW); //righthand propeller (counter-clockwise)
-  digitalWrite(motor2, HIGH); //lefthand propeller (clockwise)
-  speed1 = map(vPower, 470, 0, 0, 255);
-  speed2 = map(vPower, 470, 0, 0, 255);
-}
-else
-{
-  speed1 = 0;
-  speed2 = 0;
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(enB, OUTPUT);
+
+  servo.attach(srv);
+  servo.write(90);
+
 }
 
-  
-if(hPower>=1 && hPower < 50)
-{
-  hPower = 180 - hPower; 
-  rudder.write(hPower);
-  delay(20);
-} 
+void loop () {
 
-else if (hPower >50 && hPower <= 100)
-{
-  hPower = 180 - hPower;
-  rudder.write(hPower);
-  delay(20);
+  if (socket.available()) {
+    inputDirection = 'a';
+    inputChars[0] = '5';
+    inputChars[1] = '0';
+    inputInt = 50;
+    inputIndex = 0;
+  }
+  while (socket.available()) {
+    delay(10);
+    inputStream = ((byte) socket.read());
+    if (inputStream == ',') {
+      break;
+    } else {
+      if (inputIndex == 0) {
+        inputDirection = inputStream;
+      } else if (inputIndex == 1) {
+        inputChars[0] = inputStream;
+      } else if (inputIndex == 2) {
+        inputChars[1] = inputStream;
+      }
+      inputIndex += 1;
+    }
+  }
+  inputInt = atoi(inputChars);
+  if (inputDirection == 'v') {
+    if (inputInt > 50) {
+      //Forward Thrust
+      inputInt -= 50;
+      inputInt = fabs(inputInt);
+      speedMotors = map(inputInt, 1, 50, 0, 255);
+      //Motor right forwards
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, HIGH);
+      //Motor left backwards
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+    } else if (inputInt < 50) {
+      //Backward Thrust
+      inputInt -= 50;
+      inputInt = fabs(inputInt);
+      speedMotors = map(inputInt, 1, 50, 0, 255);
+      //Motor right backwards
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW);
+      //Motor left forwards
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, HIGH);
+    } else if (inputInt == 50) {
+      speedMotors = 0;
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, LOW);
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, LOW);
+    }
+    analogWrite(enA, speedMotors); // Send PWM signal to motor Right
+    analogWrite(enB, speedMotors); // Send PWM signal to motor Left
+  } else if (inputDirection == 'h') {
+    int angle = map(inputInt, 0, 100, 70, 110);
+    servo.write(angle);
+  }
+  delay(125);
 }
-else {
-  rudder.write(0);
-}
-delay(60);
-}
-
-
-
-
-
-
 
